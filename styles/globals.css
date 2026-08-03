@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+@theme {
+  /* colors */
+  --color-motive: #ff7a00;
+  --color-motive-hover: #e06e00;
+  --color-motive-pressed: #c26000;
+  --color-motive-soft: #fff3e6;
+  --color-motive-light: #ffecd6;
+  --color-motive-50: #fff8f0;
+  --color-motive-100: #ffecd6;
+  --color-motive-200: #ffd4a8;
+  --color-motive-300: #ffb870;
+  --color-motive-400: #ff9b38;
+  --color-motive-500: #ff7a00;
+  --color-motive-600: #e06e00;
+  --color-motive-700: #c26000;
+  --color-motive-800: #994c00;
+  --color-motive-900: #3d1f00;
+
+  --color-ink-50: #fafafa;
+  --color-ink-100: #f4f4f5;
+  --color-ink-150: #ececee;
+  --color-ink-200: #dcdce0;
+  --color-ink-300: #c2c4c8;
+  --color-ink-400: #9a9aa0;
+  --color-ink-500: #70737c;
+  --color-ink-600: #55565b;
+  --color-ink-700: #37383c;
+  --color-ink-800: #2e2f33;
+  --color-ink-900: #171719;
+
+  --color-info-soft: #eaf2fe;
+  --color-info-DEFAULT: #0066ff;
+  --color-info-hover: #005eeb;
+  --color-info-50: #f0f5ff;
+  --color-info-100: #eaf2fe;
+  --color-info-300: #94bffd;
+  --color-info-500: #0066ff;
+  --color-info-600: #005eeb;
+  --color-info-700: #0052cc;
+
+  --color-danger-soft: #fff5f5;
+  --color-danger-DEFAULT: #ff4242;
+  --color-danger-500: #ff4242;
+  --color-danger-700: #cc3333;
+
+  --color-success-soft: #f0fff4;
+  --color-success-DEFAULT: #00bf40;
+  --color-success-500: #00bf40;
+
+  --color-accent-soft: #f0fff4;
+  --color-accent-DEFAULT: #00bf40;
+  --color-accent-600: #00bf40;
+
+  /* 관리자 전용 색상 */
+  --color-admin-primary: #2563eb;
+  --color-admin-primary-hover: #1d4ed8;
+  --color-admin-soft: #eff6ff;
+
+  /* font */
+  --font-sans: "Pretendard JP Variable", "Pretendard JP", sans-serif;
+
+  /* radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* shadow */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* font size */
+  --text-title3: 24px;
+  --text-title3--line-height: 32px;
+
+  --text-body1: 16px;
+  --text-body1--line-height: 24px;
+}
+
+@layer components {
+  .btn-primary {
+    @apply text-white text-base font-bold px-7 h-[47px] rounded-[27px] bg-[#FFA94D];
+  }
+
+  .btn-white {
+    @apply text-black text-base font-bold px-7 h-[47px] rounded-[27px] bg-[#fff] border border-[#666];
+  }
+
+  .select-primary {
+    @apply h-[55px] bg-white;
+  }
+  .wrapper {
+    max-width: 1040px;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 16px;
+    width: 1024px;
+    margin: 0 auto;
+    color: #333;
+    gap: 50px;
+    position: relative;
+  }
+
+  ._postContentWrapper_1bdow_14 {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 36px;
+    border-bottom: 3px solid #f2f2f2;
+  }
+  ._sequence_1bdow_30 {
+    margin-right: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: #ffa94d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    color: #fff;
+  }
+  ._text_1bdow_22 {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 40px;
+    letter-spacing: -0.05em;
+    margin: 0;
+  }
+}
+
+.editor-wrapper {
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #f8f9fa;
+}
+
+.editor-toolbar button {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.editor-toolbar button.active {
+  background: #333;
+  color: white;
+}
+
+.tiptap {
+  min-height: 200px;
+  padding: 12px;
+  outline: none;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
+.react-datepicker {
+  width: 459px;
+}
+
+.react-datepicker__month-container {
+  width: 100%;
+}
+.react-datepicker__month {
+  width: 100%;
+}
+
+.react-datepicker__day {
+  font-size: 21px;
+}
+
+.react-datepicker__day-name {
+  font-size: 21px;
+}
+
+.multi-select {
+  position: relative;
+}
+
+.select-btn {
+  height: 38px;
+  width: 140px;
+  border: 1px solid #e3e3e3;
+  color: #646464;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  border-radius: 36px;
+  background-color: #fff;
+  padding-left: 18px;
+  padding-right: 10px;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.dropdown {
+  position: absolute;
+  top: 40px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 16px;
+  width: 600px;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 14px;
+  background: white;
+}
+
+.tag.active {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
