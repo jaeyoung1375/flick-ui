@@ -4,5 +4,11 @@ import { InsertProfileRequest } from "./onboarding.type";
 
 export const useInsertProfileMutation = () =>
   useMutation({
-    mutationFn: (body: InsertProfileRequest) => insertProfile(body),
+    mutationFn: ({
+      body,
+      profileImage,
+    }: {
+      body: InsertProfileRequest;
+      profileImage: File | null;
+    }) => insertProfile(body, profileImage),
   });

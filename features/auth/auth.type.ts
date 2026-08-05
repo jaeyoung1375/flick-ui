@@ -8,6 +8,11 @@ export type OnboardingUser = {
   completed: boolean; // 온보딩 완료 여부
 };
 
+export type RefreshResponse = {
+  accessToken: string;
+  onboardingCompleted: boolean; // 온보딩 완료 여부
+};
+
 export type User = {
   id: number;
   email: string;

@@ -4,6 +4,7 @@ import { create } from "zustand";
 
 interface OnboardingState {
   nickname: string;
+  profileImage: File | null;
   gender: string;
   birth: string;
   goal: string;
@@ -21,8 +22,9 @@ interface OnboardingState {
   reset: () => void;
 }
 
-const initialState = {
+const initialState: Omit<OnboardingState, "update" | "reset"> = {
   nickname: "",
+  profileImage: null,
   gender: "",
   birth: "",
   goal: "",

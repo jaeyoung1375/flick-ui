@@ -10,8 +10,8 @@ export default function Page() {
 
   return (
     <Step1Page
-      onNext={(name) => {
-        update({ nickname: name });
+      onNext={(name, profileImage) => {
+        update({ nickname: name, profileImage });
         router.push("/onboarding/step-2");
       }}
     />

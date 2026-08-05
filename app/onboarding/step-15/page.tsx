@@ -9,6 +9,7 @@ export default function Page() {
   const router = useRouter();
   const {
     nickname,
+    profileImage,
     gender,
     birth,
     goal,
@@ -38,20 +39,23 @@ export default function Page() {
       onFinish={() => {
         mutate(
           {
-            nickname,
-            gender,
-            birth,
-            goal,
-            weeklyCount,
-            levelCd,
-            equipmentCd,
-            gymId,
-            height,
-            weight,
-            goalWeight,
-            experienceCd,
-            squat,
-            benchPress,
+            body: {
+              nickname,
+              gender,
+              birth,
+              goal,
+              weeklyCount,
+              levelCd,
+              equipmentCd,
+              gymId,
+              height,
+              weight,
+              goalWeight,
+              experienceCd,
+              squat,
+              benchPress,
+            },
+            profileImage,
           },
           {
             onSuccess: () => {
