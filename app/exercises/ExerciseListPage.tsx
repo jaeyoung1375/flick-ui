@@ -1,50 +1,73 @@
 "use client";
 import { ChevronLeft, Dumbbell, Heart, Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import {
-  BODY_PARTS,
-  EQUIPMENTS,
-  EXERCISES,
-  type BodyPart,
-  type Equipment,
-  type Exercise,
-} from "./exercises.data";
+import { useExerciseListQuery } from "@/features/exercise/exercise.query";
+import { type Exercise } from "./exercises.data";
+import { useCodeQuery } from "@/features/code/code.query";
 
 type MyFilter = "favorite" | "recent" | null;
 
 interface ExerciseListPageProps {
   onBack: () => void;
+  onSelect?: (exercise: Exercise) => void;
 }
 
 function toggleValue<T>(list: T[], value: T) {
-  return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
+  return list.includes(value)
+    ? list.filter((v) => v !== value)
+    : [...list, value];
 }
 
-export default function ExerciseListPage({ onBack }: ExerciseListPageProps) {
+export default function ExerciseListPage({
+  onBack,
+  onSelect,
+}: ExerciseListPageProps) {
   const [keyword, setKeyword] = useState("");
   const [myFilter, setMyFilter] = useState<MyFilter>(null);
-  const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const [bodyParts, setBodyParts] = useState<string[]>([]);
+  const [equipments, setEquipments] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
+  const { data: BODY_PARTS = [] } = useCodeQuery({ comCdId: "BODY_PART_CD" });
+  const { data: EQUIPMENTS = [] } = useCodeQuery({ comCdId: "EQUIPMENTS_CD" });
+
+  //  운동목록 조회
+  const { data: exerciseList = [] } = useExerciseListQuery();
+  const exercises = useMemo<Exercise[]>(
+    () =>
+      exerciseList.map((ex) => ({
+        id: ex.exerciseId,
+        name: ex.name,
+        bodyPartCd: ex.bodyPartCd,
+        bodyPartNm: ex.bodyPartNm,
+        equipmentCd: ex.equipmentCd,
+        equipmentNm: ex.equipmentNm,
+      })),
+    [exerciseList],
+  );
+
   const filtered = useMemo(() => {
-    return EXERCISES.filter((ex) => {
+    return exercises.filter((ex) => {
       if (keyword && !ex.name.includes(keyword)) return false;
       if (myFilter === "favorite" && !favorites.has(ex.id)) return false;
       if (myFilter === "recent") return false; // TODO: 최근 운동 기록 API 연동 전까지 항상 비어있음
-      if (bodyParts.length > 0 && !bodyParts.includes(ex.bodyPart)) return false;
-      if (equipments.length > 0 && (!ex.equipment || !equipments.includes(ex.equipment)))
+      if (bodyParts.length > 0 && !bodyParts.includes(ex.bodyPartCd))
+        return false;
+      if (
+        equipments.length > 0 &&
+        (!ex.equipmentCd || !equipments.includes(ex.equipmentCd))
+      )
         return false;
       return true;
     });
-  }, [keyword, myFilter, favorites, bodyParts, equipments]);
+  }, [exercises, keyword, myFilter, favorites, bodyParts, equipments]);
 
   const grouped = useMemo(() => {
-    const map = new Map<BodyPart, Exercise[]>();
+    const map = new Map<string, Exercise[]>();
     for (const ex of filtered) {
-      const list = map.get(ex.bodyPart) ?? [];
+      const list = map.get(ex.bodyPartNm) ?? [];
       list.push(ex);
-      map.set(ex.bodyPart, list);
+      map.set(ex.bodyPartNm, list);
     }
     return Array.from(map.entries());
   }, [filtered]);
@@ -71,7 +94,7 @@ export default function ExerciseListPage({ onBack }: ExerciseListPageProps) {
           <ChevronLeft size={22} strokeWidth={2} />
         </button>
         <p className="font-['Pretendard',sans-serif] text-[17px] font-semibold text-[#0B1220]">
-          운동 목록
+          {onSelect ? "운동 선택" : "운동 목록"}
         </p>
       </div>
 
@@ -119,18 +142,18 @@ export default function ExerciseListPage({ onBack }: ExerciseListPageProps) {
         <span className="shrink-0 font-['Pretendard',sans-serif] text-[12px] font-semibold text-[#94A3B8]">
           부위
         </span>
-        {BODY_PARTS.map((part) => (
+        {BODY_PARTS.map(({ dtlCdId, dtlCdNm }) => (
           <button
-            key={part}
+            key={dtlCdId}
             type="button"
-            onClick={() => setBodyParts((prev) => toggleValue(prev, part))}
+            onClick={() => setBodyParts((prev) => toggleValue(prev, dtlCdId))}
             className={`shrink-0 rounded-full px-[12px] py-[6px] font-['Pretendard',sans-serif] text-[13px] font-semibold transition-colors ${
-              bodyParts.includes(part)
+              bodyParts.includes(dtlCdId)
                 ? "bg-[#2F80FF] text-white"
                 : "border border-[#E2E8F0] bg-white text-[#64748B]"
             }`}
           >
-            {part}
+            {dtlCdNm}
           </button>
         ))}
       </div>
@@ -140,18 +163,18 @@ export default function ExerciseListPage({ onBack }: ExerciseListPageProps) {
         <span className="shrink-0 font-['Pretendard',sans-serif] text-[12px] font-semibold text-[#94A3B8]">
           기구
         </span>
-        {EQUIPMENTS.map((equipment) => (
+        {EQUIPMENTS.map(({ dtlCdId, dtlCdNm }) => (
           <button
-            key={equipment}
+            key={dtlCdId}
             type="button"
-            onClick={() => setEquipments((prev) => toggleValue(prev, equipment))}
+            onClick={() => setEquipments((prev) => toggleValue(prev, dtlCdId))}
             className={`shrink-0 rounded-full px-[12px] py-[6px] font-['Pretendard',sans-serif] text-[13px] font-semibold transition-colors ${
-              equipments.includes(equipment)
+              equipments.includes(dtlCdId)
                 ? "bg-[#2F80FF] text-white"
                 : "border border-[#E2E8F0] bg-white text-[#64748B]"
             }`}
           >
-            {equipment}
+            {dtlCdNm}
           </button>
         ))}
       </div>
@@ -177,25 +200,35 @@ export default function ExerciseListPage({ onBack }: ExerciseListPageProps) {
             {list.map((ex, i) => (
               <div
                 key={ex.id}
+                onClick={onSelect ? () => onSelect(ex) : undefined}
                 className={`flex items-center gap-[12px] py-[12px] ${
                   i > 0 ? "border-t border-[#E2E8F0]" : ""
-                }`}
+                } ${onSelect ? "cursor-pointer" : ""}`}
               >
                 <div className="flex size-[52px] shrink-0 items-center justify-center rounded-[10px] bg-[#E4EEFF]">
-                  <Dumbbell size={22} className="text-[#2F80FF]" strokeWidth={1.5} />
+                  <Dumbbell
+                    size={22}
+                    className="text-[#2F80FF]"
+                    strokeWidth={1.5}
+                  />
                 </div>
                 <p className="flex-1 font-['Pretendard',sans-serif] text-[14px] font-semibold text-[#0B1220]">
                   {ex.name}
                 </p>
                 <button
                   type="button"
-                  onClick={() => toggleFavorite(ex.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(ex.id);
+                  }}
                   aria-label="즐겨찾기"
                   className="flex size-[32px] items-center justify-center"
                 >
                   <Heart
                     size={18}
-                    className={favorites.has(ex.id) ? "text-[#2F80FF]" : "text-[#94A3B8]"}
+                    className={
+                      favorites.has(ex.id) ? "text-[#2F80FF]" : "text-[#94A3B8]"
+                    }
                     fill={favorites.has(ex.id) ? "currentColor" : "none"}
                     strokeWidth={2}
                   />

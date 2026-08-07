@@ -1,27 +1,15 @@
 "use client";
 import {
-  BarChart3,
   Building2,
   ChevronRight,
-  Crown,
-  Dumbbell,
   List,
   Play,
   Settings,
   ShieldCheck,
   Target,
-  User,
-  Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-const NAV_ITEMS = [
-  { label: "운동", icon: Dumbbell, active: true },
-  { label: "분석", icon: BarChart3, active: false },
-  { label: "커뮤니티", icon: Users, active: false },
-  { label: "프로필", icon: User, active: false },
-  { label: "프리미엄", icon: Crown, active: false },
-];
+import BottomNav from "@/components/BottomNav";
 
 export default function WorkoutHomePage() {
   const router = useRouter();
@@ -120,27 +108,7 @@ export default function WorkoutHomePage() {
       </div>
 
       {/* 하단 탭바 */}
-      <nav className="fixed bottom-0 left-1/2 flex w-full max-w-[402px] -translate-x-1/2 items-center justify-between border-t border-[#E2E8F0] bg-white px-[8px] py-[10px]">
-        {NAV_ITEMS.map(({ label, icon: Icon, active }) => (
-          <div
-            key={label}
-            className="flex flex-1 flex-col items-center gap-[4px]"
-          >
-            <Icon
-              size={20}
-              strokeWidth={2}
-              className={active ? "text-[#2F80FF]" : "text-[#94A3B8]"}
-            />
-            <span
-              className={`font-['Pretendard',sans-serif] text-[11px] ${
-                active ? "font-semibold text-[#2F80FF]" : "text-[#94A3B8]"
-              }`}
-            >
-              {label}
-            </span>
-          </div>
-        ))}
-      </nav>
+      <BottomNav />
     </div>
   );
 }
