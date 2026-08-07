@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Code2, FileClock, LayoutDashboard, Users } from "lucide-react";
+import { Code2, Dumbbell, FileClock, LayoutDashboard, Users } from "lucide-react";
 import { cn } from "@/util/cn";
 
 const navItems = [
   { href: "/admin/dashboard", label: "대시보드", icon: LayoutDashboard },
   { href: "/admin/users", label: "회원 관리", icon: Users },
+  { href: "/admin/exercises", label: "운동 관리", icon: Dumbbell },
   { href: "/admin/code", label: "코드 관리", icon: Code2 },
   { href: "/admin/logs", label: "로그 관리", icon: FileClock },
 ];
