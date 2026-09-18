@@ -4,13 +4,14 @@
 
 | 파일 | 도메인 | 관련 라우트/features |
 |------|--------|----------------------|
-| [`auth.md`](./auth.md) | 인증·소셜 로그인·accessToken·온보딩 진입 판정 | `app/login`, `app/components/auth/AuthBootstrap.tsx`, `features/auth` |
-| [`workout.md`](./workout.md) | 온보딩(운동 프로필) + 운동 기록 화면 | `app/onboarding/step-*`, `app/profile/record`, `features/onboarding`, `features/workoutRecord`, `features/exercise` |
-| [`admin-code.md`](./admin-code.md) | 공통코드 소비 + 관리자 CRUD 화면 | `app/admin/*`, `features/code`, `features/admin`, `features/exercise`(admin 부분) |
+| [`auth.md`](./auth.md) | 인증·소셜 로그인·accessToken 재발급 | `app/login`, `app/components/auth/AuthBootstrap.tsx`, `features/auth` |
+| [`admin-code.md`](./admin-code.md) | 공통코드 소비 + 관리자 CRUD 화면 | `app/admin/*`, `features/code`, `features/admin` |
+
+> ⚠️ `workout.md`(온보딩+운동 기록 화면 플레이북)는 2026-09-16 삭제했다 — 대응 코드(`app/onboarding/*`, `app/profile/record*`, `features/{onboarding,workoutRecord,exercise}`)가 working tree에서 전부 제거됐다. **OTT 고유 도메인(콘텐츠·재생·구독 등)은 아직 도메인이 안정되지 않아 플레이북이 없다** — 백엔드 `flick-server`의 `flick-server-streaming-roadmap.md`(설계 제안 단계)를 참고.
 
 ## 작성 규칙
 
 * 도메인이 안정된 뒤(요구사항이 반복적으로 들어오는 시점) 작성한다 — 최초 구현 단계에서 미리 만들지 않는다.
 * 실제 코드에서 관찰한 사실만 적는다. 계획·희망은 [`01_project_overview/guide.md`](../01_project_overview/guide.md)에.
-* 용어는 [`../08_domain_glossary/jobmoa-ui-glossary.md`](../08_domain_glossary/jobmoa-ui-glossary.md)와 통일한다.
-* API 계약 자체(엔드포인트 존재 여부·요청/응답 필드)의 정본은 `motive-server` 저장소다. 여기서는 프론트가 그 계약을 **어떻게 소비하는지**(어느 훅이 어느 화면에서 호출되는지)를 적는다.
+* 용어는 [`../08_domain_glossary/flick-ui-glossary.md`](../08_domain_glossary/flick-ui-glossary.md)와 통일한다.
+* API 계약 자체(엔드포인트 존재 여부·요청/응답 필드)의 정본은 `flick-server` 저장소다. 여기서는 프론트가 그 계약을 **어떻게 소비하는지**(어느 훅이 어느 화면에서 호출되는지)를 적는다.

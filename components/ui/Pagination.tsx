@@ -3,6 +3,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { clsx } from "clsx";
 
+type PaginationVariant = "motive" | "admin";
+
 interface PaginationProps {
   /** 현재 페이지 (1-based) */
   currentPage: number;
@@ -12,7 +14,23 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
   /** 현재 페이지 양쪽에 표시할 페이지 수 (기본: 1) */
   siblingCount?: number;
+  /** 색상 테마 (기본: motive) */
+  variant?: PaginationVariant;
 }
+
+const variantClasses: Record<
+  PaginationVariant,
+  { active: string; idle: string }
+> = {
+  motive: {
+    active: "bg-motive text-white",
+    idle: "text-ink-600 hover:bg-motive-soft hover:text-motive",
+  },
+  admin: {
+    active: "bg-admin-primary text-white",
+    idle: "text-gray-600 hover:bg-admin-soft hover:text-admin-primary",
+  },
+};
 
 /**
  * 현재 페이지를 기준으로 표시할 페이지 번호 배열을 생성한다.
@@ -46,11 +64,13 @@ export function Pagination({
   totalPages,
   onPageChange,
   siblingCount = 1,
+  variant = "motive",
 }: PaginationProps) {
   // 페이지가 1개 이하이면 렌더링하지 않음
   if (totalPages <= 1) return null;
 
   const pages = getPageRange(currentPage, totalPages, siblingCount);
+  const { active, idle } = variantClasses[variant];
 
   return (
     <div className="flex items-center justify-center gap-1">
@@ -61,9 +81,7 @@ export function Pagination({
         aria-label="이전 페이지"
         className={clsx(
           "flex items-center justify-center w-9 h-9 rounded-[8px] transition-colors duration-150",
-          currentPage === 1
-            ? "text-ink-300 cursor-not-allowed"
-            : "text-ink-500 hover:bg-motive-soft hover:text-motive",
+          currentPage === 1 ? "text-ink-300 cursor-not-allowed" : idle,
         )}
       >
         <ChevronLeft className="w-4 h-4" />
@@ -86,9 +104,7 @@ export function Pagination({
             aria-current={currentPage === page ? "page" : undefined}
             className={clsx(
               "w-9 h-9 rounded-[8px] text-[13px] font-semibold transition-colors duration-150",
-              currentPage === page
-                ? "bg-motive text-white"
-                : "text-ink-600 hover:bg-motive-soft hover:text-motive",
+              currentPage === page ? active : idle,
             )}
           >
             {page}
@@ -103,9 +119,7 @@ export function Pagination({
         aria-label="다음 페이지"
         className={clsx(
           "flex items-center justify-center w-9 h-9 rounded-[8px] transition-colors duration-150",
-          currentPage === totalPages
-            ? "text-ink-300 cursor-not-allowed"
-            : "text-ink-500 hover:bg-motive-soft hover:text-motive",
+          currentPage === totalPages ? "text-ink-300 cursor-not-allowed" : idle,
         )}
       >
         <ChevronRight className="w-4 h-4" />

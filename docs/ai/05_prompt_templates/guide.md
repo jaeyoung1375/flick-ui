@@ -2,20 +2,22 @@
 
 개발자가 AI에게 프론트엔드 작업을 요청할 때 사용하는 표준 프롬프트 양식입니다. 이 형식을 복사해서 AI에게 제공하세요.
 
-> 📌 **이 저장소는 프론트엔드(Next.js) 전용입니다.** 서버(Spring Boot) 코드는 `jobmoa-server` 저장소에 있으므로 여기서 백엔드 코드를 생성하지 않습니다. 모든 템플릿은 App Router + `features/<domain>` 계층(api/query/mutation/type)을 전제로 합니다. 스택은 [`02_tech_stack/jobmoa-ui-tech-stack.md`](../02_tech_stack/jobmoa-ui-tech-stack.md) 참고.
+> 📌 **이 저장소는 프론트엔드(Next.js) 전용입니다.** 서버(Spring Boot) 코드는 `flick-server` 저장소에 있으므로 여기서 백엔드 코드를 생성하지 않습니다. 모든 템플릿은 App Router + `features/<domain>` 계층(api/query/mutation/type)을 전제로 합니다. 스택은 [`02_tech_stack/flick-ui-tech-stack.md`](../02_tech_stack/flick-ui-tech-stack.md) 참고.
+>
+> ⚠️ **OTT 고유 도메인(콘텐츠·재생·구독 등)은 아직 코드에 없다.** 새 도메인 화면 작업은 템플릿 2를 쓰고, 백엔드 `flick-server`의 `09_api_contract`에 대응 엔드포인트가 실제로 있는지 먼저 확인할 것 — 아직 로드맵(`flick-server-streaming-roadmap.md`) 단계일 수 있다.
 
 ---
 
-## 템플릿 1: 도메인 화면 작업 요청 (가장 자주 쓰는 양식)
+## 템플릿 1: 도메인 화면 작업 요청 (기존 인프라 화면 수정 시)
 
-기존 도메인 화면을 수정·확장할 때는 해당 도메인의 **플레이북**(`06_domain_playbooks/`)을 컨텍스트로 제공합니다.
+기존 도메인 화면(로그인·관리자 셸·공통코드·메뉴)을 수정·확장할 때는 해당 도메인의 **플레이북**(`06_domain_playbooks/`)을 컨텍스트로 제공합니다.
 
 > **[복사용 프롬프트]**
-> 너는 이 저장소(jobmoa-ui)의 프론트엔드 작업자야. 아래 문서 규칙을 지켜서 작업해 줘.
+> 너는 이 저장소(flick-ui)의 프론트엔드 작업자야. 아래 문서 규칙을 지켜서 작업해 줘.
 > * `docs/ai/06_domain_playbooks/<domain>.md` — 도메인 화면·상태·API 연동 규칙
-> * `docs/ai/04_coding_standards/jobmoa-ui-coding-standards.md` — 라우팅·상태관리·스타일 규칙
+> * `docs/ai/04_coding_standards/flick-ui-coding-standards.md` — 라우팅·상태관리·스타일 규칙
 >
-> * **대상 도메인/경로:** [예: `app/profile/record`, `features/workoutRecord`]
+> * **대상 도메인/경로:** [예: `app/admin/code`, `features/code`]
 > * **요구사항:** [추가/변경할 화면·상호작용]
 > * **인증 필요 여부:** [로그인 필요 / public]
 >
@@ -28,15 +30,15 @@
 
 ---
 
-## 템플릿 2: 새 도메인(features) 신규 구현 요청
+## 템플릿 2: 새 도메인(features) 신규 구현 요청 — OTT 고유 화면 포함
 
 > **[복사용 프롬프트]**
-> 너는 이 저장소(jobmoa-ui)의 프론트엔드 작업자야. `docs/ai/`의 개요·기술 스택·코딩 규칙을 기반으로 아래 도메인 화면을 새로 만들어 줘.
+> 너는 이 저장소(flick-ui)의 프론트엔드 작업자야. `docs/ai/`의 개요·기술 스택·코딩 규칙을 기반으로 아래 도메인 화면을 새로 만들어 줘.
 >
-> * **도메인명:** [예: `features/<domain>`]
+> * **도메인명:** [예: `features/content`]
 > * **역할:** [한 줄 정의]
 > * **라우트:** [예: `app/<route>/page.tsx`]
-> * **호출할 API:** [메서드·경로 — jobmoa-server의 `docs/ai/09_api_contract`를 먼저 확인하고, 없으면 명시]
+> * **호출할 API:** [메서드·경로 — `flick-server`의 `docs/ai/09_api_contract`를 먼저 확인하고, 없으면 명시. OTT 고유 API는 아직 없을 수 있다 — `flick-server-streaming-roadmap.md`가 제안 단계 문서임을 인지할 것]
 > * **인증 필요 여부:** [로그인 필요 / public]
 >
 > **[요구사항]**
@@ -52,9 +54,9 @@
 
 > **[복사용 프롬프트]**
 > 내가 작성한 아래 프론트엔드 코드를 리뷰하고 리팩토링해 줘.
-> `docs/ai/04_coding_standards/jobmoa-ui-coding-standards.md`의 코딩 규칙과 `docs/ai/07_review_checklist/jobmoa-ui-review-checklist.md`의 체크리스트를 지켜야 해.
+> `docs/ai/04_coding_standards/flick-ui-coding-standards.md`의 코딩 규칙과 `docs/ai/07_review_checklist/flick-ui-review-checklist.md`의 체크리스트를 지켜야 해.
 >
-> **[대상]** [컴포넌트/훅 — 예: `RecordDetailPage.tsx`]
+> **[대상]** [컴포넌트/훅]
 >
 > **[기존 코드]**
 > ```tsx
@@ -67,21 +69,20 @@
 
 ---
 
-## 템플릿 4: 인증/온보딩 관련 작업 요청
+## 템플릿 4: 인증 관련 작업 요청
 
-소셜 로그인 진입, accessToken 재발급, 온보딩 완료 판정 등 인증 흐름 작업에 사용합니다.
+소셜 로그인 진입, accessToken 재발급 등 인증 흐름 작업에 사용합니다.
 
 > **[복사용 프롬프트]**
-> 아래 작업을 해 줘. `docs/ai/06_domain_playbooks/auth.md`·`docs/ai/09_api_contract/jobmoa-ui-api-contract.md`의 계약과 어긋나지 않아야 해.
+> 아래 작업을 해 줘. `docs/ai/06_domain_playbooks/auth.md`·`docs/ai/09_api_contract/flick-ui-api-contract.md`의 계약과 어긋나지 않아야 해.
 >
-> * **대상:** [예: `AuthBootstrap` / 온보딩 스텝 / 관리자 인증 가드]
+> * **대상:** [예: `AuthBootstrap` / 관리자 인증 가드]
 > * **목적/변경 내용:** [추가·수정할 로직]
 >
 > **[준수사항]**
 > 1. accessToken을 `util/AxiosUtil.ts`의 모듈 스코프 변수 밖(컴포넌트 state, Zustand, localStorage 등)에 저장하지 말 것.
-> 2. `onboardingCompleted` 판정은 프론트에서 재계산하지 말고 `/auth/refresh` 응답값을 그대로 신뢰할 것.
-> 3. 알려진 함정(`12_known_issues`) — `AdminAuthGuard`가 실제 인증 검사 없이 children을 그대로 렌더링하는 점, 운영 환경 OAuth URL 경로 패턴 불일치 — 를 확인할 것.
-> 4. 변경을 `11_changelog`에 기록할 것.
+> 2. 알려진 함정(`12_known_issues`) — `AdminAuthGuard`가 실제 인증 검사 없이 children을 그대로 렌더링하는 점, `.env.development`의 API 베이스(9999)와 OAuth URL(9090) 포트 불일치, 운영 환경 OAuth URL 경로 패턴 불일치 — 를 확인할 것.
+> 3. 변경을 `11_changelog`에 기록할 것.
 
 ---
 

@@ -8,7 +8,7 @@ export default function MainSkeleton() {
   return (
     <main className="min-h-screen bg-ink-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#FFF8F0] via-motive-soft to-motive-light border-b border-motive-100 py-16 px-6">
+      <section className="bg-gradient-to-br from-motive-50 via-motive-soft to-motive-light border-b border-motive-100 py-16 px-6">
         <div className="max-w-[1200px] mx-auto flex flex-col items-start gap-6">
           <Image
             src="/logo.svg"

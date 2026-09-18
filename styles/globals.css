@@ -2,21 +2,21 @@
 
 @theme {
   /* colors */
-  --color-motive: #ff7a00;
-  --color-motive-hover: #e06e00;
-  --color-motive-pressed: #c26000;
-  --color-motive-soft: #fff3e6;
-  --color-motive-light: #ffecd6;
-  --color-motive-50: #fff8f0;
-  --color-motive-100: #ffecd6;
-  --color-motive-200: #ffd4a8;
-  --color-motive-300: #ffb870;
-  --color-motive-400: #ff9b38;
-  --color-motive-500: #ff7a00;
-  --color-motive-600: #e06e00;
-  --color-motive-700: #c26000;
-  --color-motive-800: #994c00;
-  --color-motive-900: #3d1f00;
+  --color-motive: #2f80ff;
+  --color-motive-hover: #2971e0;
+  --color-motive-pressed: #2564c7;
+  --color-motive-soft: #edf4ff;
+  --color-motive-light: #e4eeff;
+  --color-motive-50: #f4f8ff;
+  --color-motive-100: #e4eeff;
+  --color-motive-200: #b7d3ff;
+  --color-motive-300: #8ab7ff;
+  --color-motive-400: #5d9cff;
+  --color-motive-500: #2f80ff;
+  --color-motive-600: #2971e0;
+  --color-motive-700: #2564c7;
+  --color-motive-800: #1d4e9c;
+  --color-motive-900: #0c2040;
 
   --color-ink-50: #fafafa;
   --color-ink-100: #f4f4f5;
@@ -57,6 +57,14 @@
   --color-admin-primary: #2563eb;
   --color-admin-primary-hover: #1d4ed8;
   --color-admin-soft: #eff6ff;
+
+  /* OTT 홈 화면 전용 색상 (다크 테마, Figma "FLOW" 시안 기준) */
+  --color-ott-bg: #0b0e0e;
+  --color-ott-surface: #141a1a;
+  --color-ott-accent: #26c79e;
+  --color-ott-accent-dark: #0c1f19;
+  --color-ott-amber: #f2a640;
+  --color-ott-text-muted: #b8bfbe;
 
   /* font */
   --font-sans: "Pretendard JP Variable", "Pretendard JP", sans-serif;

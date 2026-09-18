@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, ChevronDown } from "lucide-react";
 import { useAlertStore } from "@/store/alertStore";
 import { useConfirmStore } from "@/store/confirmStore";
 import {
@@ -20,8 +20,11 @@ import AdminModal from "@/app/admin/components/AdminModal";
 import GlobalLoading from "@/app/components/ui/loading/GlobalLoading";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Pagination } from "@/components/ui/Pagination";
 import { useCodeQuery } from "@/features/code/code.query";
 import SelectOption from "@/app/onboarding/components/SelectOption";
+
+const PAGE_SIZE = 15;
 
 // ── 운동 모달 ─────────────────────────────────────────────
 
@@ -162,8 +165,20 @@ export default function ExercisesPage() {
 
   // 검색 입력값 — 엔터 또는 검색 버튼을 누르기 전까지 쿼리에 반영되지 않음
   const [searchInput, setSearchInput] = useState("");
+  const [bodyPartCd, setBodyPartCd] = useState("");
+  const [equipmentCd, setEquipmentCd] = useState("");
   // 실제 API 쿼리에 사용하는 확정된 검색 파라미터
-  const [searchParams, setSearchParams] = useState<{ name?: string }>({});
+  const [searchParams, setSearchParams] = useState<{
+    name?: string;
+    bodyPartCd?: string;
+    equipmentCd?: string;
+  }>({});
+  const [pageNum, setPageNum] = useState(1);
+
+  const { data: BODY_PARTS = [] } = useCodeQuery({ comCdId: "BODY_PART_CD" });
+  const { data: EQUIPMENTS = [] } = useCodeQuery({
+    comCdId: "EXERCISE_EQUIPMENT_CD",
+  });
 
   // 운동 등록/수정 모달 상태
   const [modal, setModal] = useState<{
@@ -172,8 +187,14 @@ export default function ExercisesPage() {
     data?: ExerciseResponse;
   }>({ open: false, mode: "create" });
 
-  const { data: exercises = [], isLoading } =
-    useAdminExerciseListQuery(searchParams);
+  const { data: pageResult, isLoading } = useAdminExerciseListQuery({
+    ...searchParams,
+    pageNum,
+    pageSize: PAGE_SIZE,
+  });
+  const exercises = pageResult?.data ?? [];
+  const totalCount = pageResult?.total ?? 0;
+  const totalPages = pageResult?.pages ?? 0;
 
   const createExercise = useCreateAdminExerciseMutation();
   const updateExercise = useUpdateAdminExerciseMutation();
@@ -181,13 +202,21 @@ export default function ExercisesPage() {
 
   /** 검색 실행 — 입력값을 쿼리 파라미터로 확정 */
   const handleSearch = () => {
-    setSearchParams(searchInput.trim() ? { name: searchInput.trim() } : {});
+    setSearchParams({
+      ...(searchInput.trim() ? { name: searchInput.trim() } : {}),
+      ...(bodyPartCd ? { bodyPartCd } : {}),
+      ...(equipmentCd ? { equipmentCd } : {}),
+    });
+    setPageNum(1);
   };
 
   /** 검색 초기화 */
   const handleSearchReset = () => {
     setSearchInput("");
+    setBodyPartCd("");
+    setEquipmentCd("");
     setSearchParams({});
+    setPageNum(1);
   };
 
   /** 운동 등록 또는 수정 요청 후 모달 닫기 */
@@ -240,6 +269,45 @@ export default function ExercisesPage() {
             className="!bg-white !h-10 !py-0 !rounded-lg focus:!border-admin-primary"
           />
         </div>
+
+        <div className="relative">
+          <select
+            value={bodyPartCd}
+            onChange={(e) => setBodyPartCd(e.target.value)}
+            className="appearance-none h-10 pl-3 pr-8 rounded-lg border border-gray-200 text-sm text-gray-700 outline-none focus:border-admin-primary bg-white cursor-pointer"
+          >
+            <option value="">전체 부위</option>
+            {BODY_PARTS.map(({ dtlCdId, dtlCdNm }) => (
+              <option key={dtlCdId} value={dtlCdId}>
+                {dtlCdNm}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={13}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+          />
+        </div>
+
+        <div className="relative">
+          <select
+            value={equipmentCd}
+            onChange={(e) => setEquipmentCd(e.target.value)}
+            className="appearance-none h-10 pl-3 pr-8 rounded-lg border border-gray-200 text-sm text-gray-700 outline-none focus:border-admin-primary bg-white cursor-pointer"
+          >
+            <option value="">전체 기구</option>
+            {EQUIPMENTS.map(({ dtlCdId, dtlCdNm }) => (
+              <option key={dtlCdId} value={dtlCdId}>
+                {dtlCdNm}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={13}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+          />
+        </div>
+
         <Button
           size="md"
           onClick={handleSearch}
@@ -247,7 +315,10 @@ export default function ExercisesPage() {
         >
           검색
         </Button>
-        {(searchInput || Object.keys(searchParams).length > 0) && (
+        {(searchInput ||
+          bodyPartCd ||
+          equipmentCd ||
+          Object.keys(searchParams).length > 0) && (
           <Button
             variant="ghost"
             size="md"
@@ -264,9 +335,9 @@ export default function ExercisesPage() {
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
           <h3 className="text-sm font-semibold text-gray-700">
             운동 목록
-            {exercises.length > 0 && (
+            {totalCount > 0 && (
               <span className="ml-2 text-xs font-normal text-gray-400">
-                {exercises.length}건
+                {totalCount}건
               </span>
             )}
           </h3>
@@ -347,6 +418,17 @@ export default function ExercisesPage() {
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="border-t border-gray-100 py-3">
+            <Pagination
+              currentPage={pageNum}
+              totalPages={totalPages}
+              onPageChange={setPageNum}
+              variant="admin"
+            />
+          </div>
+        )}
       </div>
 
       {/* 운동 등록/수정 모달 */}
