@@ -14,7 +14,7 @@ export type RefreshResponse = {
 };
 
 export type User = {
-  id: number;
+  userId: number;
   email: string;
   name: string;
   phone: string;

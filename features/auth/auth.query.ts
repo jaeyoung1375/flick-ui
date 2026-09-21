@@ -25,3 +25,8 @@ export const useMeQuery = (enabled = true) =>
     enabled,
     retry: false,
   });
+
+export const useLoginUser = () => {
+  const { data, isSuccess } = useGetTokenQuery(false);
+  return useMeQuery(isSuccess && !!data?.accessToken);
+};

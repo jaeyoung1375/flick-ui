@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { Search } from "lucide-react";
-import { useGetTokenQuery } from "@/features/auth/auth.query";
+import { useGetTokenQuery, useMeQuery } from "@/features/auth/auth.query";
 
 const MENU = ["홈", "시리즈", "영화", "라이브", "찜"];
 
 export default function HomeNav() {
   const { data, isSuccess } = useGetTokenQuery(false);
   const isLoggedIn = isSuccess && !!data?.accessToken;
+  const { data: me } = useMeQuery(isLoggedIn);
+  const initial = me?.name?.trim().charAt(0) ?? "";
 
   return (
     <div className="pt-6 px-10">
@@ -35,7 +37,9 @@ export default function HomeNav() {
         <div className="flex items-center gap-4">
           <Search size={18} className="text-ott-text-muted" />
           {isLoggedIn ? (
-            <div className="h-8 w-8 rounded-full bg-ott-accent" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ott-accent text-sm font-semibold text-black">
+              {initial}
+            </div>
           ) : (
             <Link
               href="/login"
