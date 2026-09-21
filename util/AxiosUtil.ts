@@ -1,5 +1,6 @@
 // src/utils/api.ts
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import type { RefreshResponse } from "@/features/auth/auth.type";
 
 interface ApiResponse<T> {
   code: string;
@@ -32,6 +33,26 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// 동시에 여러 요청이 401을 받아도 refresh는 한 번만 호출
+let refreshPromise: Promise<RefreshResponse> | null = null;
+
+export const refreshAccessToken = () => {
+  if (!refreshPromise) {
+    refreshPromise = api
+      .post<ApiResponse<RefreshResponse>>("/api/v1/auth/refresh")
+      .then((res) => {
+        setAccessToken(res.data.data.accessToken);
+
+        return res.data.data;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+};
+
 api.interceptors.response.use(
   (res: AxiosResponse<ApiResponse<unknown>>) => {
     const { code, data, message } = res.data;
@@ -42,18 +63,37 @@ api.interceptors.response.use(
 
     return res;
   },
-  (err) => {
+  async (err) => {
     const status = err.response?.status;
-    const url = err.config?.url;
+    const original = err.config;
+    const url = original?.url;
 
     if (
       status === 401 &&
+      !original?._retry &&
       !url?.includes("/auth/login") &&
       !url?.includes("/auth/refresh")
     ) {
-      // 토큰은 쿠키로만 관리하므로 세션 만료 여부를 프론트에서 판별할 수 없음 -> 홈으로 리다이렉트
-      window.location.href = "/";
-      return new Promise(() => {});
+      original._retry = true;
+
+      try {
+        // 재발급 성공 시 request 인터셉터가 새 accessToken을 붙여 원래 요청을 재시도
+        await refreshAccessToken();
+        return api(original);
+      } catch (refreshErr) {
+        // 네트워크 오류·타임아웃·서버 오류는 일시적일 수 있으므로 로그아웃하지 않고 원래 401만 전달
+        if (
+          axios.isAxiosError(refreshErr) &&
+          (!refreshErr.response || refreshErr.response.status >= 500)
+        ) {
+          return Promise.reject(err);
+        }
+
+        // refreshToken도 만료 -> 홈으로 리다이렉트
+        setAccessToken(null);
+        window.location.href = "/";
+        return new Promise(() => {});
+      }
     }
 
     return Promise.reject(err);
