@@ -3,11 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, PenSquare } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
-import Dropdown from "@/components/Dropdown";
-import Button from "@/components/Button";
-import NotificationDropdown from "./NotificationDropdown";
 
 interface HeaderProps {
   /** "back": 모바일 페이지용 뒤로가기 헤더, "default": 데스크탑 상단 네비 */
