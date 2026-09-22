@@ -1,12 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { get, post, setAccessToken } from "@/util/AxiosUtil";
-import { RefreshResponse, User } from "./auth.type";
+import { get, refreshAccessToken } from "@/util/AxiosUtil";
+import { User } from "./auth.type";
 
-export const getToken = async () => {
-  const res = await post<RefreshResponse>("/api/v1/auth/refresh");
-  setAccessToken(res.data.accessToken);
-  return res.data;
-};
+export const getToken = () => refreshAccessToken();
 
 export const useGetTokenQuery = (enabled = true) =>
   useQuery({

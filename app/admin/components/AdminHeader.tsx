@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 const pageTitleMap: Record<string, string> = {
   "/admin/dashboard": "대시보드",
   "/admin/users": "회원 관리",
-  "/admin/exercises": "운동 관리",
   "/admin/code": "코드 관리",
 };
 
