@@ -28,3 +28,9 @@ export type User = {
   modDt: string;
   lastLoginDt?: string;
 };
+
+export type SignupRequest = {
+  email: string;
+  password: string;
+  nickname: string;
+};

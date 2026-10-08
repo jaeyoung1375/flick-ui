@@ -16,15 +16,10 @@ const imgGithub =
 
 interface LoginPageProps {
   onForgotPassword?: () => void;
-  onRegister?: () => void;
   onSubmit?: (email: string, password: string) => void;
 }
 
-export default function Login({
-  onForgotPassword,
-  onRegister,
-  onSubmit,
-}: LoginPageProps) {
+export default function Login({ onForgotPassword, onSubmit }: LoginPageProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,7 +72,7 @@ export default function Login({
               htmlFor="email"
               className="mb-[6px] block font-['Pretendard',sans-serif] text-[13px] font-medium text-white/80"
             >
-              이메일 또는 전화번호
+              아이디
             </label>
             <div className="relative flex h-[52px] items-center rounded-[16px] border border-white/10 bg-ott-surface px-[16px] focus-within:border-ott-accent">
               <input
@@ -181,7 +176,7 @@ export default function Login({
         {/* 회원가입 링크 */}
         <button
           type="button"
-          onClick={onRegister}
+          onClick={() => router.push("/signup")}
           className="mt-[28px] block w-full cursor-pointer text-center font-['Pretendard',sans-serif] text-[13px] font-medium text-white/70"
         >
           {"계정이 없으신가요? "}
