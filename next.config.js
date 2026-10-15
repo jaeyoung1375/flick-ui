@@ -1,15 +1,6 @@
 const nextConfig = {
   /* config options here */
 
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://152-67-196-0.sslip.io/api/v1/*",
-      },
-    ];
-  },
-
   images: {
     remotePatterns: [
       {
