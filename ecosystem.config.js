@@ -7,7 +7,7 @@ module.exports = {
   apps: [
     {
       name: "flick-ui",
-      cwd: "/web/flick-ui",
+      cwd: "/web/flick-ui/current",
       script: "node_modules/next/dist/bin/next",
       args: "start -p 3000",
       exec_mode: "cluster",
