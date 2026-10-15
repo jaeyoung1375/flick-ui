@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://152-67-196-0.sslip.io/api/v1/*",
+        destination: "https://152-67-196-0.sslip.io/api/v1/:path*",
       },
     ];
   },
