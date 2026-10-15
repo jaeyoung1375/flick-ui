@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import Router from "@/util/router";
 import { useForm, useWatch } from "react-hook-form";
 import { SignupRequest } from "@/features/auth/auth.type";
+import { useJoinMutation } from "@/features/auth/auth.mutation";
+import { useAlertStore } from "@/store/alertStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 type SignUpFormValues = SignupRequest & { passwordConfirm: string };
 
@@ -18,6 +21,11 @@ const inputClass =
 
 export default function Signup() {
   const router = new Router(useRouter());
+  const queryClinet = useQueryClient();
+
+  const { setAlert } = useAlertStore();
+
+  const { mutate, isPending } = useJoinMutation();
 
   const {
     register,
@@ -36,6 +44,16 @@ export default function Signup() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = ({ passwordConfirm, ...body }: SignUpFormValues) => {
     // TODO: 가입 API 연결 — mutate(body)
+    mutate(body, {
+      onSuccess: async () => {
+        await queryClinet.invalidateQueries({ queryKey: ["auth", "me"] });
+        router.push("/");
+      },
+      onError: (e) => {
+        console.log(e);
+        setAlert(e.message);
+      },
+    });
   };
 
   return (
@@ -184,6 +202,7 @@ export default function Signup() {
         <button
           type="button"
           onClick={() => router.push("/login")}
+          disabled={isPending}
           className="mt-[28px] block w-full cursor-pointer text-center font-['Pretendard',sans-serif] text-[13px] font-medium text-white/70"
         >
           {"이미 계정이 있으신가요? "}

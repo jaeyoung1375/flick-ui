@@ -96,6 +96,13 @@ api.interceptors.response.use(
       }
     }
 
+    // 서버가 내려준 에러 응답은 2xx의 code !== "0000"과 같은 형태로 통일 (refresh는 AxiosError 유지)
+    const body = err.response?.data;
+    if (body?.code && !url?.includes("/auth/refresh")) {
+      const { code, data, message } = body;
+      return Promise.reject({ code, data, message });
+    }
+
     return Promise.reject(err);
   },
 );
