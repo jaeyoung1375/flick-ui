@@ -32,7 +32,7 @@ export default function Signup() {
     handleSubmit,
     control,
     getValues,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<SignUpFormValues>({ mode: "onChange" });
 
   const [email, password, passwordConfirm, nickname] = useWatch({
@@ -81,6 +81,7 @@ export default function Signup() {
 
         {/* 폼 */}
         <form
+          noValidate
           onSubmit={handleSubmit(onSubmit)}
           className="mt-[36px] flex flex-col gap-[18px]"
         >
@@ -94,6 +95,7 @@ export default function Signup() {
                 id="email"
                 type="email"
                 {...register("email", {
+                  required: "이메일을 입력해주세요",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: "이메일 형식이 아닙니다",
@@ -101,7 +103,6 @@ export default function Signup() {
                 })}
                 placeholder="example@flick.com"
                 autoComplete="email"
-                required
                 className={inputClass}
               />
               {email && !errors.email && (
@@ -124,10 +125,12 @@ export default function Signup() {
               <input
                 id="password"
                 type="password"
-                {...register("password", { deps: "passwordConfirm" })}
+                {...register("password", {
+                  required: "비밀번호를 입력해주세요",
+                  deps: "passwordConfirm",
+                })}
                 placeholder="비밀번호 입력"
                 autoComplete="new-password"
-                required
                 className={inputClass}
               />
               {password && (
@@ -148,6 +151,7 @@ export default function Signup() {
                 id="passwordConfirm"
                 type="password"
                 {...register("passwordConfirm", {
+                  required: "비밀번호를 다시 입력해주세요",
                   validate: (v) =>
                     !v ||
                     v === getValues("password") ||
@@ -155,7 +159,6 @@ export default function Signup() {
                 })}
                 placeholder="비밀번호 다시 입력"
                 autoComplete="new-password"
-                required
                 className={inputClass}
               />
               {passwordMatch && (
@@ -178,9 +181,8 @@ export default function Signup() {
               <input
                 id="nickname"
                 type="text"
-                {...register("nickname")}
+                {...register("nickname", { required: "닉네임을 입력해주세요" })}
                 placeholder="닉네임 입력"
-                required
                 className={inputClass}
               />
               {nickname && (
@@ -192,6 +194,7 @@ export default function Signup() {
           {/* 가입 버튼 */}
           <button
             type="submit"
+            disabled={!isValid}
             className="mt-[6px] h-[52px] w-full cursor-pointer rounded-full border-none bg-ott-accent font-['Pretendard',sans-serif] text-[16px] font-bold text-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
           >
             회원가입
