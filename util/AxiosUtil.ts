@@ -41,9 +41,10 @@ export const refreshAccessToken = () => {
     refreshPromise = api
       .post<ApiResponse<RefreshResponse>>("/api/v1/auth/refresh")
       .then((res) => {
-        setAccessToken(res.data.data.accessToken);
+        const { data } = res.data;
+        setAccessToken(data.accessToken);
 
-        return res.data.data;
+        return data;
       })
       .finally(() => {
         refreshPromise = null;

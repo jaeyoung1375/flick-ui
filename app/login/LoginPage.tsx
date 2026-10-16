@@ -7,6 +7,8 @@
 import { Check, ChevronLeft, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAlertStore } from "@/store/alertStore";
+import { useLoginMutation } from "@/features/auth/auth.mutation";
 
 // 국내에서 흔히 쓰는 소셜 로그인 3종 (Google / Kakao / GitHub) 브랜드 아이콘
 const imgGoogle = "https://img.icons8.com/?id=17949&format=png&size=64";
@@ -16,17 +18,24 @@ const imgGithub =
 
 interface LoginPageProps {
   onForgotPassword?: () => void;
-  onSubmit?: (email: string, password: string) => void;
 }
 
-export default function Login({ onForgotPassword, onSubmit }: LoginPageProps) {
+export default function Login({ onForgotPassword }: LoginPageProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { mutate: login, isPending } = useLoginMutation();
+  const { setAlert } = useAlertStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.(email, password);
+    login(
+      { email, password },
+      {
+        onSuccess: () => router.push("/"),
+        onError: (e) => setAlert(e.message),
+      },
+    );
   };
 
   const handleGoogleLogin = () => {
@@ -122,7 +131,8 @@ export default function Login({ onForgotPassword, onSubmit }: LoginPageProps) {
           {/* 로그인 버튼 */}
           <button
             type="submit"
-            className="mt-[24px] h-[52px] w-full cursor-pointer rounded-full border-none bg-ott-accent font-['Pretendard',sans-serif] text-[16px] font-bold text-black transition-opacity hover:opacity-90 active:opacity-80"
+            disabled={isPending}
+            className="mt-[24px] h-[52px] w-full cursor-pointer rounded-full border-none bg-ott-accent font-['Pretendard',sans-serif] text-[16px] font-bold text-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             로그인
           </button>
